@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "pcrisho.power-admin",
+  "name": "Power Administrator",
+  "version": "1.0.0",
+  "author": "pcrisho",
+  "description": "Toggle Lenovo battery conservation mode (80% charge cap)",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "Panel.qml"
+  },
+  "barWidget": {
+    "displayName": "Power Administrator",
+    "description": "Toggle battery charge limit (conservation mode)",
+    "category": "System",
+    "allowMultiple": false
+  }
+}
