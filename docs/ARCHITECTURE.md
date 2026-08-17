@@ -1,31 +1,17 @@
 # Architecture
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│  Omarchy shell (Quickshell)                                 │
-│                                                             │
-│  ┌──────────────────────┐         ┌──────────────────────┐  │
-│  │ pcrisho.power-admin  │         │ pcrisho.battery      │  │
-│  │ (widget, Panel.qml)  │         │ (service clone)      │  │
-│  │                      │         │ batteryThreshold: 35 │  │
-│  │ state = read  sysfs  │         └──────────┬───────────┘  │
-│  │ toggle = write sysfs │                    │              │
-│  └─────────┬────────────┘              low-battery notif    │
-│            │                            (35% threshold)     │
-│            │ pkexec (polkit prompt → root)                  │
-└────────────┼────────────────────────────────────────────────┘
-             ▼
-┌─────────────────────────────┐
-│ /sys/bus/platform/devices/  │
-│   VPC2004:00/               │
-│   conservation_mode (0|1)   │
-└─────────────┬───────────────┘
-              │ enforced by
-              ▼
-┌─────────────────────────────┐
-│ Embedded Controller (EC)    │
-│ firmware-fixed ~80% cap     │
-└─────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph shell["Omarchy shell (Quickshell)"]
+        widget["pcrisho.power-admin<br/>widget (Panel.qml)<br/>state = read sysfs · toggle = write sysfs"]
+        battery["pcrisho.battery<br/>service clone<br/>batteryThreshold: 35"]
+    end
+
+    battery -->|"low-battery notification<br/>(35% threshold)"| user["User (desktop)"]
+    widget <-->|"pkexec sh -c<br/>polkit prompt → root"| sysfs["/sys/bus/platform/devices/VPC2004:00/<br/>conservation_mode (0 | 1)"]
+    service["battery-conservation.service<br/>(systemd oneshot · every boot)"] -->|"echo 1 >"| sysfs
+
+    sysfs -->|"enforced by"| ec["Embedded Controller (EC)<br/>firmware-fixed ~80% charge cap"]
 ```
 
 ## Components
