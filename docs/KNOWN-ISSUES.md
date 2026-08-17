@@ -113,5 +113,5 @@ ls /usr/share/icons | grep -i yaru-gray                # empty → theme missing
 2. Confirm: `gsettings get org.gnome.desktop.interface icon-theme` → a value
    that exists in `/usr/share/icons/`, and re-send the notification.
 
-**Upstream**: worth reporting to Omarchy (theme template vs. shipped icon
-package mismatch).
+**Upstream**: reported to Omarchy — [basecamp/omarchy#7203](https://github.com/basecamp/omarchy/issues/7203)
+(follow-up to the closed #5257).
